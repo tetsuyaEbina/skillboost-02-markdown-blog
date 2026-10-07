@@ -393,3 +393,116 @@ package.jsonとlockファイルが整合していない場合はエラーにな�
 - HTML文字列をReactで表示する方法と注意点
 - シンタックスハイライトのCSS
 - 記事ごとのメタデータ
+
+## 12. 実装したファイルと処理の対応
+
+| ファイル | 役割 |
+|---|---|
+| src/lib/posts.ts | ファイルの読み込み、frontmatterの検証、HTML変換 |
+| src/app/page.tsx | 記事一覧 |
+| src/app/posts/[slug]/page.tsx | 記事詳細と静的生成対象の指定 |
+| src/app/layout.tsx | 全ページ共通の枠 |
+| src/app/not-found.tsx | 存在しないページの表示 |
+| src/app/globals.css | 本文とコードのスタイル |
+| posts/*.md | 記事データ |
+
+### Node.jsのfsとpath
+
+fsはファイルを扱うNode.js標準モジュール。
+readdirSyncでフォルダ内の一覧、readFileSyncで本文を読む。
+
+Sync付きの処理は、完了するまで次の処理を待つ同期処理。
+今回は小規模な記事をビルド時に読むため使用している。
+
+pathはファイルパスを組み立てる標準モジュール。
+process.cwd()は、プログラムの現在の作業ディレクトリを返す。
+
+これらはブラウザではなく、サーバー・ビルド側で使う。
+
+### slugとファイル名
+
+nextjs-app-router.mdのslugはnextjs-app-router。
+対応するURLは/posts/nextjs-app-router。
+
+小文字英数字とハイフンだけを許可し、実際に存在する記事だけを読む。
+
+### frontmatterの検証
+
+title・descriptionは空でない文字列。
+dateは引用符付きのYYYY-MM-DDで、実在する日付。
+tagsは空でない文字列の配列。
+
+不正な記事はビルドで検出し、修正を促す。
+本文のh1は許可せず、記事タイトルと見出し階層を揃える。
+
+### 一覧の並べ替え
+
+YYYY-MM-DD形式は、文字列比較で日付順に並べられる。
+新しい日付を先にし、同日ならslug順にする。
+
+### Promiseとawait
+
+Promiseは、後で得られる処理結果を表すオブジェクト。
+awaitは、その結果を待って値を受け取る構文。
+awaitを使う関数にはasyncを指定する。
+
+記事のHTML変換と、Next.jsのparams取得で使用している。
+
+### params
+
+動的ルートから渡される情報。
+/posts/nextjs-app-routerならslugがnextjs-app-routerになる。
+
+今回のNext.jsではparamsをPromiseとして受け取り、awaitで取り出す。
+
+### generateStaticParams
+
+ビルド時に作る記事のslug一覧を返す。
+Next.jsがそれぞれの値で記事詳細ページを生成する。
+
+dynamicParams = falseにより、一覧に含まれない記事URLは404にする。
+新しい記事を公開するには再ビルドが必要。
+今回の構成では、next.config.tsでcacheComponentsを無効にしている。<br>
+Cache Components有効時にはdynamicParamsを指定できないため、<br>
+記事URLをgenerateStaticParamsで列挙し、未登録URLを404にする構成に揃えた。
+
+### generateMetadata
+
+記事ごとのタイトルと説明文を設定する関数。
+一覧とは別に、各記事に合う情報を提供する。
+
+### notFound
+
+存在しない記事ではNext.jsのnotFoundを呼ぶ。
+not-found.tsxの画面が表示される。
+
+### Link
+
+Next.jsのリンクコンポーネント。
+サイト内ページへの移動に使う。
+
+### dangerouslySetInnerHTML
+
+HTML文字列を、文字としてではなくHTMLとして表示するReactの指定。
+通常の{post.html}では、HTMLタグも文字として表示される。
+
+外部入力をそのまま渡すとXSSの原因になる。
+XSSは、意図しないスクリプトなどをページへ混入させる攻撃。
+
+今回は自作記事だけを扱い、remark-rehypeの標準設定で
+Markdown内の生HTMLを通さない構成にしている。
+rehype-rawやallowDangerousHtmlは有効にしていない。
+
+この構成を、外部投稿を受け付けるサービスへそのまま流用しない。
+
+### MarkdownのHTML変換
+
+remarkでMarkdownを解析する。
+remark-rehypeでHTML用の構造に変える。
+rehype-highlightでコードの色分け用クラスを追加する。
+rehype-stringifyでHTML文字列にする。
+
+### Typographyとハイライト
+
+proseクラスが記事全体の文字・余白・見出しを整える。
+hljsから始まるCSSクラスが、コード内の色を指定する。
