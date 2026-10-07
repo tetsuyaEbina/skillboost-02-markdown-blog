@@ -9,6 +9,8 @@ type Props = {
 
 export const dynamicParams = false;
 
+// npm run build時に、generateStaticParamsが実行される
+// Next.js で決めている名前
 export function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
 }
@@ -27,6 +29,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// paramsは、URLから取り出した情報を受け取るもの
+// - export default：このファイルの代表として外部へ渡す。
+// - Next.jsのルール：page.tsxのdefault exportを、ページ表示に使う。
+// 上記この2つが組み合わさって、Next.jsが関数を呼び出す。
 export default async function PostPage({ params }: Props) {
   const { slug } = await params;
   const post     = await getPost(slug);

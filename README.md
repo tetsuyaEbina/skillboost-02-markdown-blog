@@ -244,10 +244,8 @@ npm audit fix --forceは、関連パッケージを古いメジャーバージ�
 
 ## 学習メモ
 
-環境構築で実行したコマンドとその意味、
-React・TypeScript・App Router、
-Markdown変換と静的生成の仕組みは
-[学習メモ](docs/learning-notes.md)にまとめています。
+- [技術・コマンドの学習メモ](docs/learning-notes.md)
+- [記事から公開ページになるまでの流れ](docs/rendering-flow.md)
 
 ## AIの利用
 

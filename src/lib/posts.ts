@@ -18,11 +18,13 @@ const postsDirectory = path.join(process.cwd(), "posts");
 const slugPattern    = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 // 記事ファイルを読み込んで、メタデータと本文を返す。
+// ["first-post", "second-post"]
 export function getPostSlugs(): string[] {
   return fs
     .readdirSync(postsDirectory, { withFileTypes: true })
-    .filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
+    .filter((entry) => entry.isFile() && entry.name.endsWith(".md")) // .mdで終わっているファイルのみを対象にする
     .map((entry) => {
+      // ファイル名の.mdを取り除く
       const slug = entry.name.slice(0, -3);
 
       if (!slugPattern.test(slug)) {
@@ -41,6 +43,9 @@ function readPost(slug: string) {
 
   const filePath = path.join(postsDirectory, `${slug}.md`);
   const source   = fs.readFileSync(filePath, "utf8");
+
+  // gray-matterで管理情報と本文を分ける
+  // matterは、ファイル先頭で読み込んだgray-matterの関数
   const { data, content } = matter(source);
 
   function invalid(field: string): never {
@@ -126,9 +131,9 @@ export async function getPost(slug: string) {
 
   // remarkでMarkdownの構造を解析する
   const result = await remark()
-    .use(remarkRehype) // html用の構造に変換
+    .use(remarkRehype) // HTML用の構造に変換
     .use(rehypeHighlight, { detect: false }) // コードの色分け用クラスを追加する
-    .use(rehypeStringify) // HTML文字列にする
+    .use(rehypeStringify) // HTML用の構造をHTML文字列へ変換
     .process(post.content);
 
   return {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDate, getAllPosts } from "@/lib/posts";
+import { formatDate, getAllPosts } from "@/lib/posts"; //@/は今回、src/を表す
 
 export default function Home() {
   const posts = getAllPosts();
