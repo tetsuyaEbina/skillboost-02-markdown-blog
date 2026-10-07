@@ -190,11 +190,11 @@ dangerouslySetInnerHTMLには、変換処理で生成したHTMLを渡してい�
 - [x] npm run lintが成功
 - [x] npm run buildが成功
 - [x] Vercelの公開URLを発行
-- [ ] 公開環境でタイトル・日付・タグの表示を確認
-- [ ] /posts/[slug]の見出し階層を確認
-- [ ] コードブロックのシンタックスハイライトを確認
-- [ ] スマートフォン実機で表示・操作を確認
-- [ ] LighthouseのPerformanceが90以上
+- [x] 公開環境でタイトル・日付・タグの表示を確認
+- [x] /posts/[slug]の見出し階層を確認
+- [x] コードブロックのシンタックスハイライトを確認
+- [x] スマートフォン実機で表示・操作を確認
+- [x] LighthouseのPerformanceが90以上
 
 ## 検証結果
 
@@ -205,9 +205,9 @@ dangerouslySetInnerHTMLには、変換処理で生成したHTMLを渡してい�
 | 記事数 | 5本 |
 | lint | 成功 |
 | build | 成功 |
-| 公開後の表示・操作 | 未確認 |
-| Lighthouse | 未測定 |
-| スマートフォン実機 | 未確認 |
+| 公開後の表示・操作 | 成功 |
+| Lighthouse測定URL | https://skillboost-02-markdown-blog.vercel.app/ |
+| スマートフォン実機 | 成功 |
 | 依存関係の監査 | 下記参照。更新後の再監査結果は追記予定 |
 
 性能スコアは、測定日・対象URL・端末設定とともに記録します。
