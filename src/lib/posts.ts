@@ -17,6 +17,7 @@ export type PostSummary = {
 const postsDirectory = path.join(process.cwd(), "posts");
 const slugPattern    = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+// 記事ファイルを読み込んで、メタデータと本文を返す。
 export function getPostSlugs(): string[] {
   return fs
     .readdirSync(postsDirectory, { withFileTypes: true })
@@ -123,10 +124,11 @@ export async function getPost(slug: string) {
     return null;
   }
 
+  // remarkでMarkdownの構造を解析する
   const result = await remark()
-    .use(remarkRehype)
-    .use(rehypeHighlight, { detect: false })
-    .use(rehypeStringify)
+    .use(remarkRehype) // html用の構造に変換
+    .use(rehypeHighlight, { detect: false }) // コードの色分け用クラスを追加する
+    .use(rehypeStringify) // HTML文字列にする
     .process(post.content);
 
   return {

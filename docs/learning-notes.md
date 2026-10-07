@@ -424,6 +424,8 @@ process.cwd()は、プログラムの現在の作業ディレクトリを返す�
 nextjs-app-router.mdのslugはnextjs-app-router。
 対応するURLは/posts/nextjs-app-router。
 
+※slugとは、URLの変わる部分を受け取る指定
+
 小文字英数字とハイフンだけを許可し、実際に存在する記事だけを読む。
 
 ### frontmatterの検証
