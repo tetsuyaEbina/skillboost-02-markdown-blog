@@ -206,11 +206,16 @@ dangerouslySetInnerHTMLには、変換処理で生成したHTMLを渡してい�
 | lint | 成功 |
 | build | 成功 |
 | 公開後の表示・操作 | 成功 |
-| Lighthouse測定URL | https://skillboost-02-markdown-blog.vercel.app/ |
 | スマートフォン実機 | 成功 |
+| Lighthouse測定URL | https://skillboost-02-markdown-blog.vercel.app/ |
+| Lighthouse確認日 | 2026年10月7日 |
+| 測定条件 | Mobile |
+| Performance | 100 |
+| Accessibility | 100 |
+| Best Practices | 100 |
+| SEO | 100 |
 | 依存関係の監査 | 下記参照。更新後の再監査結果は追記予定 |
 
-性能スコアは、測定日・対象URL・端末設定とともに記録します。
 
 ## 依存関係の確認
 
